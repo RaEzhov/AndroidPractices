@@ -1,0 +1,159 @@
+#you need to setup 2 secrets in the repository
+#1. TELEGRAM_BOT_TOKEN - get it from here: https://core.telegram.org/bots#6-botfather
+#2. TELEGRAM_CHAT_ID - run /help or any other bot command from the bot chat or group and 
+#     run this command on terminal: curl -s https://api.telegram.org/bot<token>/getUpdates | jq '.result[0].message.chat.id'
+#
+#> to generate a continuous apk in release add "#genapk" in yor commit message
+#> to get the apk to your chat add "#genapk-chat" in yor commit message
+#NOTE: in telegram messages replace line break (\n) with (%0A)
+
+name: Android CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Main
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Clone repo
+        uses: actions/checkout@v1
+
+      - name: Get commit details
+        id: commit_info
+        run: |
+          echo ::set-output name=commit_count::$(git rev-list --count HEAD)
+          FILES_CHANGED="$(git diff-tree --no-commit-id --name-status --diff-filter=ADMR -r ${{ github.sha }})"
+          FILES_CHANGED="${FILES_CHANGED//$'A\t'/[A]~ }"
+          FILES_CHANGED="${FILES_CHANGED//$'D\t'/[D]~ }"
+          FILES_CHANGED="${FILES_CHANGED//$'M\t'/[M]~ }"
+          FILES_CHANGED="${FILES_CHANGED//$'R\t'/[R]~ }"
+          FILES_CHANGED="${FILES_CHANGED//'%'/'%25'}"
+          FILES_CHANGED="${FILES_CHANGED//$'\n'/'%0A'}"
+          FILES_CHANGED="${FILES_CHANGED//$'\r'/'%0D'}"
+          echo ::set-output name=files_changed::$FILES_CHANGED
+
+      - name: Send a message about the latest commit
+        run: |
+          curl \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d parse_mode=HTML \
+          -d text=\
+          "↗️ <b>PUSH</b>%0A\
+          <b>was made at:</b> ${{ github.repository }}%0A\
+          <b>by:</b> <u>${{ github.actor }}</u>%0A\
+          <b>commit #:</b> ${{ steps.commit_info.outputs.commit_count }}%0A\
+          <b>commit message:</b>%0A\
+          ${{ github.event.head_commit.message }}%0A\
+          %0A\
+          <b>files changed:</b>%0A\
+          <pre>${{  steps.commit_info.outputs.files_changed }}</pre>%0A\
+          %0A\
+          <b>url:</b> https://github.com/${{ github.repository }}/commit/${{ github.sha }}" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
+
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Cache gradle stuff
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Run Gradle Build
+        run: ./gradlew build
+
+      - name: Run Gradle assembleDebug
+        run: ./gradlew assembleDebug
+
+      - name: Delete previous continuous release
+        if: "contains(github.event.head_commit.message, '#genapk')"
+        run: |
+          if git show-ref --tags | egrep -q "refs/tags/continuous"
+          then
+              release_query=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -s \
+              https://api.github.com/repos/${{ github.repository }}/releases \
+              | jq '. | map(select(.tag_name == "continuous"))[0]')
+
+              curl -i -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X DELETE \
+              https://api.github.com/repos/${{ github.repository }}/releases/assets/$(echo $release_query | jq .assets[0].id)
+              curl -i -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X DELETE \
+              https://api.github.com/repos/${{ github.repository }}/releases/$(echo $release_query | jq .id)
+              git tag -d continuous
+              curl -i -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X DELETE \
+              https://api.github.com/repos/${{ github.repository }}/git/refs/tags/continuous
+              sleep 1 #required else next action will fail
+          else 
+              echo "tag not found"
+          fi
+
+      - name: Create Release
+        if: "contains(github.event.head_commit.message, '#genapk')"
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: continuous
+          release_name: continuous-build-r${{ steps.commit_info.outputs.commit_count }}
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset
+        if: "contains(github.event.head_commit.message, '#genapk')"
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app/build/outputs/apk/debug/app-debug.apk
+          asset_name: app-debug.apk
+          asset_content_type: application/zip
+
+      - name: Send a message about the release
+        if: "contains(github.event.head_commit.message, '#genapk')"
+        run: |
+          curl \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d parse_mode=HTML \
+          -d text=\
+          "📱 <b>Debug Apk released</b>%0A\
+          url: https://github.com/${{ github.repository }}/releases/tag/continuous" \
+          "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+
+      - name: Send apk to chat
+        if: "contains(github.event.head_commit.message, '#genapk-chat')"
+        run: |
+          curl \
+          -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -F parse_mode=HTML \
+          -F caption=\
+          "📱 <b>Debug Apk released</b> \
+          url: https://github.com/${{ github.repository }}/releases/tag/continuous" \
+          -F document=@"./app/build/outputs/apk/debug/app-debug.apk" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+
+      - name: Send a message if build fails
+        if: failure()
+        run: |
+          curl \
+          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+          -d parse_mode=HTML \
+          -d text=\
+          "❌ <b><u>BUILD FAILED!!!</u></b>%0A\
+          <b>job url:</b> https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
