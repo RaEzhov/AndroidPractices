@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Открыватель ссылок</string>
+    <string name="default_link_txt">*Ссылка будет здесь*</string>
+    <string name="open_link_button">Открыть в браузере</string>
+    <string name="enter_link_button">Ввести ссылку</string>
+    <string name="link_hint">введите ссылку</string>
+    <string name="accept_link_button">Ввод</string>
+    <string name="toast_landscape">Альбомный</string>
+    <string name="toast_portrait">Портретный</string>
+</resources>

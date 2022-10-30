@@ -3,16 +3,35 @@ package com.example.linkopener;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
+
+    private int previousOrientation = Configuration.ORIENTATION_PORTRAIT;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation != previousOrientation) {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                Toast.makeText(this, getResources().getString(R.string.toast_landscape), Toast.LENGTH_SHORT).show();
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Toast.makeText(this, getResources().getString(R.string.toast_portrait), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        previousOrientation = newConfig.orientation;
+    }
 
     public static final String MSG_KEY = "link_key";
 

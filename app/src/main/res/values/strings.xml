@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LinkOpener</string>
+    <string name="app_name">Link opener</string>
+    <string name="default_link_txt">*Your link will be here*</string>
+    <string name="open_link_button">Open in browser</string>
+    <string name="enter_link_button">Enter link</string>
+    <string name="link_hint">type link</string>
+    <string name="accept_link_button">Accept</string>
+    <string name="toast_landscape">Landscape</string>
+    <string name="toast_portrait">Portrait</string>
 </resources>

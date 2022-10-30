@@ -2,15 +2,36 @@ package com.example.linkopener;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.media.MicrophoneDirection;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class InputLinkActivity extends AppCompatActivity {
+
+    private int previousOrientation = Configuration.ORIENTATION_PORTRAIT;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation != previousOrientation) {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                Toast.makeText(this, getResources().getString(R.string.toast_landscape), Toast.LENGTH_SHORT).show();
+            } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                Toast.makeText(this, getResources().getString(R.string.toast_portrait), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        previousOrientation = newConfig.orientation;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
