@@ -14,11 +14,26 @@
         android:theme="@style/Theme.LinkOpener"
         tools:targetApi="31">
         <activity
-            android:name=".InputLinkActivity"
+            android:name=".screens.AddUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AddPetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AddTicketActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.CheckTicketActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.DatabaseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.InputLinkActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".screens.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true">
             <intent-filter>

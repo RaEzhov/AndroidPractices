@@ -8,4 +8,19 @@
     <string name="accept_link_button">Accept</string>
     <string name="toast_landscape">Landscape</string>
     <string name="toast_portrait">Portrait</string>
+    <string name="go_database_button">database</string>
+    <string name="select_person">Select person</string>
+    <string name="enter_species">Enter species</string>
+    <string name="enter_nickname">Enter nickname</string>
+    <string name="create">Create</string>
+    <string name="select_pet">Select pet</string>
+    <string name="choose_date">Choose date</string>
+    <string name="accept">Accept</string>
+    <string name="enter_first_name">Enter first name</string>
+    <string name="enter_last_name">Enter last name</string>
+    <string name="checked">Checked</string>
+    <string name="delete_ticket">Delete ticket</string>
+    <string name="add_user">Add user</string>
+    <string name="add_pet">Add pet</string>
+    <string name="ticket_n">Ticket №</string>
 </resources>

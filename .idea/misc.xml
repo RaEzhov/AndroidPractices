@@ -3,8 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.309" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/drawable/ic_launcher_background.xml" value="0.309" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/drawable/plus.xml" value="0.209" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_add_person.xml" value="0.38697916666666665" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_add_pet.xml" value="0.3729166666666667" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_add_ticket.xml" value="0.27447916666666666" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_add_user.xml" value="0.22" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_check_ticket.xml" value="0.27447916666666666" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_database.xml" value="0.27447916666666666" />
         <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_input_link.xml" value="0.38697916666666665" />
-        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_main.xml" value="0.38697916666666665" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Projects/AndroidPractices/app/src/main/res/layout/tickets_item.xml" value="0.205078125" />
         <entry key="..\:/Projects/LinkOpener/app/src/main/res/layout/activity_input_link.xml" value="0.25" />
         <entry key="..\:/Projects/LinkOpener/app/src/main/res/layout/activity_main.xml" value="0.33" />
       </map>
