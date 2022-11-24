@@ -18,7 +18,7 @@
     <string name="accept">Accept</string>
     <string name="enter_first_name">Enter first name</string>
     <string name="enter_last_name">Enter last name</string>
-    <string name="checked">Checked</string>
+    <string name="checked">Used</string>
     <string name="delete_ticket">Delete ticket</string>
     <string name="add_user">Add user</string>
     <string name="add_pet">Add pet</string>

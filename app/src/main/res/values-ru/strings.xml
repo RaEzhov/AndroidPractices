@@ -9,4 +9,18 @@
     <string name="toast_landscape">Альбомный</string>
     <string name="toast_portrait">Портретный</string>
     <string name="go_database_button">База данных</string>
+    <string name="select_person">Выберите пользователя</string>
+    <string name="enter_species">Введите вид</string>
+    <string name="enter_nickname">Введите кличку</string>
+    <string name="create">Создать</string>
+    <string name="select_pet">Выберите питомца</string>
+    <string name="choose_date">Введите дату</string>
+    <string name="accept">Подтвердить</string>
+    <string name="enter_first_name">Введите имя</string>
+    <string name="enter_last_name">Введите фамилию</string>
+    <string name="checked">Использован</string>
+    <string name="delete_ticket">Удалить билет</string>
+    <string name="add_user">Добавить пользователя</string>
+    <string name="add_pet">Добавить питомца</string>
+    <string name="ticket_n">Билет №</string>
 </resources>
